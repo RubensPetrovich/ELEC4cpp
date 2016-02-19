@@ -69,52 +69,39 @@ int main(int argc, char *argv[]) {
 //  Histogramme //
 //////////////////////////////////////////////////////////////////////////////
 
-// On calcule le nombre d'occurence maximum dans un bin de 100
+// On créer un vecteur donc l'indice corespond à la centième du bin
+// Et la valeurs correspond au nombre de valeurs dans se bin
 // Pour pouvoir ensuite bien répartire les 60 *
-  auto max_occurence = 0;
-  auto cnt = 0;
-  auto centieme = 0;
-  for (unsigned i = 0; i < buf.size(); i++) {
-    cnt++;
-    if (buf[i]/100 > centieme) {
+  vector<int> occurence;
+  auto cnt = 0;             // Permet de compter les valeurs
+  auto centieme = 0;        // Permet de changer de bin
+  for (unsigned int i = 0; i < buf.size(); i++) {
+    if (std::floor(buf[i]/100) > centieme) {
+      occurence.push_back(cnt);
       centieme++;
-      if (cnt > max_occurence) max_occurence = cnt;
+      while ( std::floor(buf[i]/100) > centieme ) {
+        occurence.push_back(0);
+        centieme++;
+        }
       cnt = 0;
-    }
+    } cnt++;
   }
-  if (max_occurence < cnt) max_occurence = cnt;
+  occurence.push_back(cnt);
+  auto occurence_max = std::distance(occurence.begin(),
+                std::max_element(occurence.begin(), occurence.end()));
 
 // On affiche l'histogramme en parcourant le tableu trié
-//
-  float count = 0.0;
+
   centieme = 0;
 
-  float echelon =  60.0/max_occurence;
-  float nb_etoile = 1.0 ;
+  auto nb_etoile = 0;
 
-  
 
-  for (unsigned int i = 0 ; i < buf.size() ; i++) {
-//On sort du bin
-    if (buf[i]/100 > centieme) {
-      for (int j = centieme; j < buf[i]/100; j++) {
-        std::cout << "\n" << std::setw(6) << std::right << 100*j << " " ;
-        centieme++ ;
-      }
-
-//      std::cout << nb_etoile;
-      count = echelon;
-      nb_etoile = 0.0;
-      centieme++;
-    }
-//buf[i] < centiem : on est dans le bin
-    else {
-      if ( count >= nb_etoile ){
-        std::cout << "*";
-        nb_etoile += 1.0;
-      }
-      count += echelon;
-    //  std::cout << "cnt" << count ;
+  for (unsigned int i = 0; i < occurence.size(); ++i) {
+    std::cout << '\n' << std::setw(6) << i*100 << std::setw(6) << occurence[i] << ' ';
+    nb_etoile = 60 * occurence[i] / occurence[occurence_max];
+    for (int j = 0; j < nb_etoile; j++) {
+      std::cout << '*';
     }
   }
 }
