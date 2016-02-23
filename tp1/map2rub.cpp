@@ -33,13 +33,6 @@
 
 using std::string;
 
-// Fonction affichage (debug):
-// void print_map(Map& m){
-   // std::cout << '{';
-   // for(auto& p: m)
-        // std::cout << p.first << ':' << p.second << ' ';
-   // std::cout << "}\n";
-// }
 
 // Read from a file a set of ID (string format) and value (double format)
 // Split ID and value
@@ -69,28 +62,39 @@ int main(int argc, char *argv[]) {
   bool found;
 
   map1=mapping(argv[1]);
-  // print_map(map1);
 
-  string userId="";
-
-  while(userId!="END"){
+  string userIn="";
+  double value ;
+  while(userIn!="END"){
      std::cout << "query> ";
-     std::cin >> userId;
+     std::cin >> userIn;
+    found=false;
 
-     found=false;
-
-     for(auto& p: map1){
-      if(userId==p.first){
-        found=true;
-        std::cout << "value[" << p.first << "]= " << p.second << '\n';
+     if (userIn[0] == '+') {
+      value = std::stod(userIn.substr(1)) ;
+      for(auto& p: map1){
+        if( p.second > value*0.99 && p.second < value*1.01 ){
+          found=true;
+          std::cout << "value[" << p.first << "] = " << p.second << '\n';
+        }
       }
+      if(!found){
+       std::cout << "This value does not exists \n";
      }
-
-     if(userId=="END"){
-      std::cout << "Bye..." << std::endl;
-     }
-     else if(!found){
+     } else {
+       for(auto& p: map1){
+        if(userIn==p.first){
+          found=true;
+          std::cout << "value[" << p.first << "] = " << p.second << '\n';
+         break;
+        }
+      }
+      if(!found){
        std::cout << "This ID does not exists \n";
      }
+    }
+     if(userIn=="END"){
+      std::cout << "Bye..." << std::endl;
+     }     
   }
 }

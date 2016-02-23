@@ -7,6 +7,7 @@
 // \brief     This file belongs to the C++ tutorial project
 //            exercice 1
 // \author    Rubens PETROVICH
+//            Nicolas Doens
 //
 // \copyright Copyright ng2goodies 2015
 //            Distributed under the MIT License
