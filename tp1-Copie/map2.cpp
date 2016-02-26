@@ -33,6 +33,7 @@
 #include <iomanip>
 #include <sstream>
 #include <map>
+#include <windows.h>
 
 using std::string;
 
@@ -63,6 +64,9 @@ std::map<string, double> mapping(string file) {
 int main(int argc, char *argv[]) {
   std::map<string, double> map2;
   bool found;                     // found = 1 Si l'ID est trouvée dans le map
+      ULARGE_INTEGER tbegin,tend;
+      FILETIME ttmp={0,0};                    // temporary variable
+      double texec=0.;
 
   map2 = mapping(argv[1]);
 
@@ -70,11 +74,16 @@ int main(int argc, char *argv[]) {
   double value;
 
   while (userIn != "END") {
-     std::cout << "query> ";
-     std::cin >> userIn;
+    std::cout << "query> ";
+    std::cin >> userIn;
+//TIIMMMMMEEEEE
+      ::GetSystemTimeAsFileTime(&ttmp);       // store current time in ttmp structure
+      tbegin.HighPart=ttmp.dwHighDateTime;    // convert ttmp to two int32
+      tbegin.LowPart=ttmp.dwLowDateTime;
+//TIIMMMMEEEEEE
     found = false;
 
-     if (userIn[0] == '+') {
+    if (userIn[0] == '+') {
       value = std::stod(userIn.substr(1));
       for (auto& p : map2) {
         if ( p.second > value*0.99 && p.second < value*1.01 ) {
@@ -87,19 +96,28 @@ int main(int argc, char *argv[]) {
       } else if (!found) {
        std::cout << "This value does not exists \n";
       }
-     } else {
-       for (auto& p : map2) {        // On parcourt le map  =>  p.first = ID; p.second = Valeur
+    } else {
+      for (auto& p : map2) {        // On parcourt le map  =>  p.first = ID; p.second = Valeur
         if (userIn == p.first) {
           found = true;
           std::cout << "value[" << p.first << "] = " << p.second << '\n';
-         break;
+          break;
         }
       }
       if (userIn == "END") {
         std::cout << "Bye..." << std::endl;
       } else if (!found) {
-       std::cout << "This ID does not exists \n";
-     }
+        std::cout << "This ID does not exists \n";
+      }
     }
+    //TIIMMMMEEEEEE
+    ::GetSystemTimeAsFileTime(&ttmp);       // store current time in ttmp structure
+      tend.HighPart=ttmp.dwHighDateTime;      // convert ttmp to two int32
+      tend.LowPart=ttmp.dwLowDateTime;
+      // Compute execution time
+      texec=((double)((tend.QuadPart-tbegin.QuadPart)/10000))/1000.;
+
+    //TIIMMMMEEEEEE
+    std::cout << "time : " << texec << std::endl ;
   }
 }

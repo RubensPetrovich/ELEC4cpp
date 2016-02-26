@@ -57,13 +57,8 @@ ifeq ($(MAKECMDGOALS), histogram)
 TARGET             := histogram.exe
 SRC_FILES          := histogram.cpp
 else 
-ifeq ($(MAKECMDGOALS), optionnel)
-TARGET             := optionnel.exe
-SRC_FILES          := optionnel.cpp
-else 
 TARGET             := *.exe
-SRC_FILES          := map1.cpp map2.exe histogram.cpp optionnel.cpp
-endif
+SRC_FILES          := map1.cpp map2.exe histogram.cpp
 endif
 endif
 endif
@@ -79,14 +74,13 @@ DEP_FILES          := $(addprefix  $(OBJDIR)/,$(notdir $(SRC_FILES:.cpp=.r.P)))
 DEP_FILES_DEBUG    := $(addprefix  $(OBJDIR)/,$(notdir $(SRC_FILES:.cpp=.d.P)))
 
 
-.PHONY: help mean_and_median clean map1 map2 histogram optionnel
+.PHONY: help mean_and_median clean map1 map2 histogram
 
 help:
 	@printf "make mean_and_median => compile mean_and_median\n"
 	@printf "make histogram       => compile histogram\n"
 	@printf "make map1            => compile map1\n"
 	@printf "make map2            => compile map2\n"
-	@printf "make optionnel       => compile optionnel\n"
 	@printf "make clean           => remove all generated files\n"
 	@printf "make help            => print this help\n"
 
@@ -99,8 +93,6 @@ map1: $(TARGET)
 map2: $(TARGET)
   
 histogram: $(TARGET)
-
-optionnel: $(TARGET)
 
 
 $(TARGET): $(OBJECT_FILES) Makefile

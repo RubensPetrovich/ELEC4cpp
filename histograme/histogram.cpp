@@ -4,21 +4,20 @@
 //
 // \file      histogram.cpp
 //
-// \brief     This file belongs to the C++ tutorial project
-//            exercice 1
+// \brief     TP_Introduction: histogram.cpp
+
 // \author    Rubens PETROVICH
 //            Nicolas Doens
 //
-// \copyright Copyright ng2goodies 2015
-//            Distributed under the MIT License
-//            See http://opensource.org/licenses/MIT
+// \Copyright 2016  Petrovich Rubens
+//                  Doens Nicolas                 
 //
 //////////////////////////////////////////////////////////////////////////////////
 // header-log
 //
-//
-// Date 17/02/2016
-// version  3.2
+// $Author$
+// $Date$
+// $Revision$
 //
 //////////////////////////////////////////////////////////////////////////////////
 // header-end
@@ -70,12 +69,13 @@ int main(int argc, char *argv[]) {
 //  Histogramme //
 //////////////////////////////////////////////////////////////////////////////
 
-// On créer un vecteur donc l'indice corespond à la centième du bin
+// On créer un vecteur d'entier "occurence" donc l'indice corespond à la centième du bin
 // Et la valeurs correspond au nombre de valeurs dans se bin
 // Pour pouvoir ensuite bien répartire les 60 *
   vector<int> occurence;
   auto cnt = 0;             // Permet de compter les valeurs
   auto centieme = 0;        // Permet de changer de bin
+  
   for (unsigned int i = 0; i < buf.size(); i++) {
     if (std::floor(buf[i]/100) > centieme) {
       occurence.push_back(cnt);
@@ -92,11 +92,8 @@ int main(int argc, char *argv[]) {
                 std::max_element(occurence.begin(), occurence.end()));
 
 // On affiche l'histogramme en parcourant le tableu trié
-
   centieme = 0;
-
   auto nb_etoile = 0;
-
 
   for (unsigned int i = 0; i < occurence.size(); ++i) {
     std::cout << '\n' << std::setw(6) << i*100 << std::setw(6) << occurence[i] << ' ';
